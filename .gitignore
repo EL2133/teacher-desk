@@ -1,0 +1,13 @@
+.env
+.env.local
+web/.env
+data/
+__pycache__/
+*.pyc
+.Python
+public/
+*.bak
+*.bak-*
+.bak-*/
+node_modules/
+.DS_Store

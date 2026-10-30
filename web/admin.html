@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#6a4d96" />
+    <title>管理台</title>
+    <link rel="icon" href="./assets/favicon.svg" />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <script src="./js/config.js"></script>
+  </head>
+  <body>
+    <div class="panel admin-gate">
+      <p class="page-kicker">老師工作台</p>
+      <h1 class="page-title" id="title">管理台</h1>
+      <p class="page-sub" id="sub"></p>
+      <div class="split">
+        <button type="button" class="tab active" data-lang="zh">中文</button>
+        <button type="button" class="tab" data-lang="en">English</button>
+      </div>
+      <form id="gate" class="card">
+        <p class="tiny" id="status"></p>
+        <label><span data-label="email"></span><input name="email" type="email" autocomplete="username" required></label>
+        <label>
+          <span data-label="password"></span>
+          <span class="peek">
+            <input name="password" type="password" autocomplete="current-password" required minlength="6">
+            <button type="button" class="peek-btn" id="peek">顯示</button>
+          </span>
+        </label>
+        <button class="btn btn-primary" id="enter" type="submit">進入</button>
+        <div id="google-btn"></div>
+      </form>
+    </div>
+    <script>
+      if (location.protocol === 'file:') {
+        location.replace('http://127.0.0.1:5174/admin');
+      }
+      const copy = {
+        zh: {
+          title: '管理台',
+          sub: '這是獨立的管理頁，不在老師工作台裡面，工作台也沒有入口。只有指定帳戶可以進入。之後的管理功能會放在這裡。',
+          email: '電郵',
+          password: '密碼',
+          enter: '進入',
+          show: '顯示',
+          hide: '隱藏',
+          checking: '正在確認身份…',
+          denied: '這個帳戶不能進入管理台。',
+          bad: '電郵或密碼不正確。',
+          down: '伺服器未回應。請稍候再試。',
+          profile: '請先在老師工作台完成這個 Google 帳戶的設定。',
+        },
+        en: {
+          title: 'Private desk',
+          sub: 'This desk is separate from the teacher workbench, and the workbench has no link to it. Only the appointed account can enter. Later admin tools will live here.',
+          email: 'Email',
+          password: 'Password',
+          enter: 'Enter',
+          show: 'Show',
+          hide: 'Hide',
+          checking: 'Checking this account…',
+          denied: 'This account cannot open the desk.',
+          bad: 'The email or password is not right.',
+          down: 'The server did not answer. Wait a moment and try again.',
+          profile: 'Finish this Google account on the teacher workbench first.',
+        },
+      };
+      let locale = 'zh';
+      const say = (key) => copy[locale][key];
+      function apiUrl(path) {
+        const base = String(window.TD_API || window.MKPC_API || '').replace(/\/$/, '');
+        if (!base || /^https?:/i.test(path)) return path;
+        return base + (path.startsWith('/') ? path : '/' + path);
+      }
+      function lsGet(nk, ok) {
+        try {
+          let v = localStorage.getItem(nk);
+          if (v != null) return v;
+          v = localStorage.getItem(ok);
+          if (v != null) { try { localStorage.setItem(nk, v); } catch {} return v; }
+        } catch {}
+        return null;
+      }
+      function readAuth() {
+        try { return JSON.parse(lsGet('td-auth', 'mkpc-auth') || 'null'); } catch { return null; }
+      }
+      function capsules() {
+        try { return JSON.parse(lsGet('td-capsules', 'mkpc-capsules') || '{}'); } catch { return {}; }
+      }
+      function remember(res) {
+        const email = res && res.user && res.user.email;
+        const capsule = res && res.capsule;
+        if (!email || !capsule) return;
+        const db = capsules();
+        db[String(email).trim().toLowerCase()] = String(capsule);
+        localStorage.setItem('td-capsules', JSON.stringify(db));
+      }
+      function paint() {
+        document.documentElement.lang = locale === 'en' ? 'en' : 'zh-Hant';
+        document.getElementById('title').textContent = say('title');
+        document.getElementById('sub').textContent = say('sub');
+        document.querySelector('[data-label="email"]').textContent = say('email');
+        document.querySelector('[data-label="password"]').textContent = say('password');
+        document.getElementById('enter').textContent = say('enter');
+        const input = document.querySelector('[name="password"]');
+        document.getElementById('peek').textContent = say(input.type === 'password' ? 'show' : 'hide');
+        document.querySelectorAll('[data-lang]').forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.lang === locale);
+        });
+      }
+      function note(key) {
+        document.getElementById('status').textContent = key ? say(key) : '';
+      }
+      async function openDesk(token, session) {
+        note('checking');
+        let res;
+        try {
+          res = await fetch(apiUrl('/api/admin/app'), { headers: { Authorization: 'Bearer ' + token } });
+        } catch {
+          note('down');
+          return;
+        }
+        if (res.status === 403) { note('denied'); return; }
+        if (res.status === 401) { note(''); return; }
+        if (!res.ok) { note('down'); return; }
+        if (session) {
+          remember(session);
+          localStorage.setItem('td-auth', JSON.stringify({ token: session.token, user: session.user }));
+        }
+        const html = await res.text();
+        document.open();
+        document.write(html);
+        document.close();
+      }
+      document.getElementById('peek').addEventListener('click', () => {
+        const input = document.querySelector('[name="password"]');
+        input.type = input.type === 'password' ? 'text' : 'password';
+        paint();
+      });
+      document.body.addEventListener('click', (event) => {
+        const lang = event.target.closest('[data-lang]');
+        if (!lang) return;
+        locale = lang.dataset.lang;
+        paint();
+      });
+      document.getElementById('gate').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.email.value.trim().toLowerCase();
+        note('checking');
+        let res;
+        try {
+          res = await fetch(apiUrl('/api/login'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password: form.password.value, capsule: capsules()[email] || '' }),
+          });
+        } catch {
+          note('down');
+          return;
+        }
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.token) { note('bad'); return; }
+        openDesk(data.token, data);
+      });
+      function mountGoogle(clientId) {
+        const el = document.getElementById('google-btn');
+        if (!clientId || !window.google?.accounts?.id) return;
+        window.google.accounts.id.initialize({
+          client_id: clientId,
+          auto_select: false,
+          callback: async (resp) => {
+            if (!resp || !resp.credential) return;
+            note('checking');
+            let res;
+            try {
+              res = await fetch(apiUrl('/api/google'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential: resp.credential, capsules: capsules() }),
+              });
+            } catch {
+              note('down');
+              return;
+            }
+            const data = await res.json().catch(() => ({}));
+            if (data.needsProfile) { note('profile'); return; }
+            if (!res.ok || !data.token) { note('bad'); return; }
+            openDesk(data.token, data);
+          },
+        });
+        el.innerHTML = '';
+        window.google.accounts.id.renderButton(el, {
+          type: 'standard', theme: 'outline', size: 'large', text: 'continue_with', shape: 'pill', width: 320,
+        });
+      }
+      paint();
+      const existing = readAuth();
+      if (existing && existing.token) openDesk(existing.token);
+      fetch(apiUrl('/api/auth-config')).then((res) => res.json()).then((cfg) => {
+        const id = String((cfg && cfg.googleClientId) || '').trim();
+        if (!id) return;
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.onload = () => mountGoogle(id);
+        document.head.appendChild(script);
+      }).catch(() => {});
+    </script>
+  </body>
+</html>

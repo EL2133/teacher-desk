@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#6a4d96" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>老師工作台</title>
+    <meta name="description" content="給老師的教學工作台：學生名單、功課日曆、考試成績、欠交追蹤與課堂進度。" />
+    <link rel="icon" href="./assets/favicon.svg" />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div id="app" class="auth-only">
+      <div class="login-wrap">
+        <div class="login-boot">
+          <div class="dino-run" aria-hidden="true">
+            <div class="dino">
+              <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                <g fill="currentColor">
+                  <path d="M2 34 L16 28 L20 32 L16 38 Z"/>
+                  <rect x="16" y="24" width="28" height="14" rx="3"/>
+                  <rect x="36" y="12" width="10" height="20" rx="3"/>
+                  <rect x="44" y="16" width="20" height="11" rx="4"/>
+                  <rect class="dino-eye" x="54" y="19" width="3.2" height="3.2"/>
+                  <rect x="40" y="30" width="8" height="3" rx="1"/>
+                  <g class="dino-legs dino-legs-a">
+                    <rect x="24" y="36" width="4" height="8"/><rect x="22" y="43" width="9" height="3"/>
+                    <rect x="36" y="36" width="4" height="6"/><rect x="34" y="41" width="8" height="3"/>
+                  </g>
+                  <g class="dino-legs dino-legs-b">
+                    <rect x="24" y="36" width="4" height="6"/><rect x="24" y="41" width="8" height="3"/>
+                    <rect x="36" y="36" width="4" height="8"/><rect x="36" y="43" width="9" height="3"/>
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="card login-card">
+            <img class="brand-logo" src="./assets/favicon.svg" alt="" />
+            <h1>老師工作台</h1>
+            <p>正在載入…</p>
+            <p class="tiny">請用 <b>start.bat</b> 開啟，網址必須是<br /><b>http://localhost:5174</b></p>
+            <p id="boot-error" class="auth-error" hidden></p>
+          </div>
+          <p class="app-copy login-copy">© 2026 版權所有<br />此網頁由 Law Tsz Chun Ethan 製作</p>
+        </div>
+      </div>
+    </div>
+    <div id="toast-root"></div>
+    <script>
+      function showBootError(msg) {
+        var box = document.getElementById('boot-error');
+        if (!box) return;
+        box.hidden = false;
+        box.textContent = msg;
+      }
+      window.addEventListener('error', function (e) {
+        showBootError('載入失敗：' + (e.message || 'unknown'));
+      });
+      window.addEventListener('unhandledrejection', function (e) {
+        var reason = e && e.reason;
+        showBootError('載入失敗：' + (reason && reason.message ? reason.message : reason || 'unknown'));
+      });
+      setTimeout(function () {
+        var app = document.getElementById('app');
+        if (!window.__APP_READY && app && app.querySelector('.login-card') && /正在載入/.test(app.innerText)) {
+          showBootError('仍未載入。請關閉此頁，雙擊資料夾裡的 start.bat，然後等它自動打開瀏覽器。不要雙擊 index.html。網址必須是 http://localhost:5174');
+        }
+      }, 4000);
+    </script>
+    <script src="./js/config.js"></script>
+    <script type="module">
+      import('./js/app.js').catch(function (err) {
+        showBootError('載入失敗：' + ((err && err.message) || err));
+      });
+    </script>
+  </body>
+</html>

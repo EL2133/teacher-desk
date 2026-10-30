@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#6a4d96" />
+    <title>管理台</title>
+    <base href="/" />
+    <link rel="icon" href="/assets/favicon.svg" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="page-kicker" id="kicker">管理台</p>
+          <h1 class="page-title" id="title">校曆控制台</h1>
+          <p class="page-sub" id="sub"></p>
+        </div>
+        <div class="split">
+          <button type="button" class="tab active" data-lang="zh">中文</button>
+          <button type="button" class="tab" data-lang="en">English</button>
+          <a class="btn btn-sm btn-ghost" id="back" href="/index.html#/calendar">返回日曆</a>
+        </div>
+      </div>
+      <form id="editor" class="card" action="javascript:void(0)" method="post">
+        <div class="form-row">
+          <label><span data-label="zh">中文名稱</span><input name="zh" required></label>
+          <label><span data-label="en">英文名稱</span><input name="en" required></label>
+        </div>
+        <div class="form-row">
+          <label><span data-label="start">開始日期</span><input type="date" name="start"></label>
+          <label><span data-label="end">結束日期</span><input type="date" name="end"></label>
+        </div>
+        <div class="form-row">
+          <label><span data-label="kind">類別</span>
+            <select name="kind">
+              <option value="holiday">假期</option>
+              <option value="exam">考試／統測</option>
+              <option value="learning">學習活動</option>
+              <option value="activity">其他活動</option>
+              <option value="meeting">會議</option>
+              <option value="org">聯校／基金活動</option>
+            </select>
+          </label>
+          <label><span data-label="who">出現於</span>
+            <select name="audience">
+              <option value="both">DSE 與 IAL</option>
+              <option value="dse">只限 DSE</option>
+              <option value="ial">只限 IAL</option>
+            </select>
+          </label>
+        </div>
+        <label class="check-line"><input type="checkbox" name="undated"> <span data-label="undated">日期未定</span></label>
+        <label><span data-label="month">未定事項所屬月份</span><input name="month" placeholder="YYYY-MM" pattern="\d{4}-\d{2}"></label>
+        <p class="tiny" id="form-note"></p>
+        <div class="split">
+          <button class="btn btn-primary" id="save-btn" type="submit">新增事項</button>
+          <button class="btn btn-ghost" id="cancel-edit" type="button" hidden>取消</button>
+          <button class="btn btn-ghost" id="reset" type="button">還原 2026–2027 校曆</button>
+        </div>
+      </form>
+      <div class="tabs">
+        <button type="button" class="tab active" data-track="all">全部</button>
+        <button type="button" class="tab" data-track="dse">DSE</button>
+        <button type="button" class="tab" data-track="ial">IAL</button>
+        <button type="button" class="tab" data-track="special">專屬事項</button>
+        <span class="tiny" id="count"></span>
+      </div>
+      <div id="list"></div>
+    </div>
+    <script type="module">
+<!--APP_MODULE-->
+    </script>
+  </body>
+</html>
