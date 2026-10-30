@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Serve Teacher Work Platform and the per-user Poe AI helper."""
+"""Serve Teacher Desk／教師枱 and the per-user Poe AI helper."""
 
 from __future__ import annotations
 
@@ -2483,7 +2483,7 @@ def chat_system_prompt(context: dict, locale: str) -> str:
     students = context.get("students") or []
     homework = context.get("homework") or []
     lessons = context.get("lessons") or []
-    return f"""You are the in-app assistant for Teacher Work Platform.
+    return f"""You are the in-app assistant for Teacher Desk.
 Teacher: {teacher.get('chineseName') or ''} {teacher.get('firstName') or ''} {teacher.get('lastName') or ''} (nickname {teacher.get('nickname') or ''}).
 Today: {context.get('today')}.
 Known classes: {json.dumps(classes, ensure_ascii=False)[:2000]}
@@ -3111,7 +3111,7 @@ def send_brevo_email(to: str, subject: str, body: str) -> bool:
     if not key or not sender:
         _LAST_MAIL_ERROR = "config:" + mail_config()
         return False
-    sender_name = (os.environ.get("BREVO_SENDER_NAME") or "Teacher Work Platform").strip() or "Teacher Work Platform"
+    sender_name = (os.environ.get("BREVO_SENDER_NAME") or "Teacher Desk").strip() or "Teacher Desk"
     payload = json.dumps({
         "sender": {"name": sender_name, "email": sender},
         "to": [{"email": to}],
@@ -3147,10 +3147,10 @@ def send_brevo_email(to: str, subject: str, body: str) -> bool:
 def send_recovery_email(to: str, pin: str, name: str) -> bool:
     load_env()
     host = (os.environ.get("SMTP_HOST") or "").strip()
-    subject = "老師工作台 登入 PIN"
+    subject = "教師枱 登入 PIN"
     body = (
         f"{name or '老師'} 您好，\n\n"
-        f"你的老師工作台登入 PIN 是：{pin}\n"
+        f"你的教師枱登入 PIN 是：{pin}\n"
         f"兩小時內有效。可用此 PIN 登入，然後再改密碼。\n\n"
         f"若你沒有申請重設，請忽略此信。\n"
     )
@@ -3159,7 +3159,7 @@ def send_recovery_email(to: str, pin: str, name: str) -> bool:
     outbox.mkdir(exist_ok=True)
     stamp = time.strftime("%Y%m%d-%H%M%S")
     (outbox / f"{stamp}-{to.replace('@', '_at_')}.txt").write_text(
-        f"To: {to}\nSubject: 老師工作台 登入 PIN\n\n{body}", encoding="utf-8"
+        f"To: {to}\nSubject: 教師枱 登入 PIN\n\n{body}", encoding="utf-8"
     )
     if send_brevo_email(to, subject, body):
         return True
@@ -4716,7 +4716,7 @@ def main() -> None:
     load_env()
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     ready = "on" if env_ai_key() else "off (set XAI_API_KEY in .env or a key in Settings)"
-    print(f"Teacher Work Platform  http://{HOST}:{PORT}  (AI key {ready})")
+    print(f"Teacher Desk  http://{HOST}:{PORT}  (AI key {ready})")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

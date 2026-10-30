@@ -6,7 +6,7 @@ export function passwordPage(locale, ui) {
   return `
     <div class="login-wrap">
       <div class="card login-card">
-        <img class="brand-logo" src="./assets/favicon.svg" alt="">
+        <img class="brand-logo" src="./assets/logo-mark.png" alt="">
         <h1>${esc(t(locale, 'auth.changeTitle'))}</h1>
         <p class="tiny">${esc(t(locale, 'auth.changeHint'))}</p>
         <form class="form" data-action="change-password">
@@ -74,7 +74,7 @@ export function loginPage(locale, ui) {
       </aside>
       <div class="login-main">
       <div class="login-head">
-        <img class="brand-logo" src="./assets/favicon.svg" alt="">
+        <img class="brand-logo" src="./assets/logo-mark.png" alt="">
         <h1>${esc(t(locale, 'brand'))}</h1>
         <p class="tiny">${esc(t(locale, 'auth.hello'))}</p>
         ${ui.googleClientId && mode !== 'google-signup' ? `<div id="google-btn" class="google-slot"></div><p class="tiny google-or">${esc(t(locale, 'auth.orEmail'))}</p>` : ''}

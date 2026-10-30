@@ -6,13 +6,15 @@
     <meta name="robots" content="noindex" />
     <meta name="theme-color" content="#6a4d96" />
     <title>管理台</title>
-    <link rel="icon" href="./assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon-192.png" />
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
     <link rel="stylesheet" href="./css/styles.css" />
     <script src="./js/config.js"></script>
   </head>
   <body>
     <div class="panel admin-gate">
-      <p class="page-kicker">老師工作台</p>
+      <p class="page-kicker">教師枱</p>
       <h1 class="page-title" id="title">管理台</h1>
       <p class="page-sub" id="sub"></p>
       <div class="split">
@@ -40,7 +42,7 @@
       const copy = {
         zh: {
           title: '管理台',
-          sub: '這是獨立的管理頁，不在老師工作台裡面，工作台也沒有入口。只有指定帳戶可以進入。之後的管理功能會放在這裡。',
+          sub: '這是獨立的管理頁，不在教師枱裡面，工作台也沒有入口。只有指定帳戶可以進入。之後的管理功能會放在這裡。',
           email: '電郵',
           password: '密碼',
           enter: '進入',
@@ -50,7 +52,7 @@
           denied: '這個帳戶不能進入管理台。',
           bad: '電郵或密碼不正確。',
           down: '伺服器未回應。請稍候再試。',
-          profile: '請先在老師工作台完成這個 Google 帳戶的設定。',
+          profile: '請先在教師枱完成這個 Google 帳戶的設定。',
         },
         en: {
           title: 'Private desk',

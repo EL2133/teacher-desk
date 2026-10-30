@@ -402,7 +402,7 @@ function layout(state, route, page) {
     <aside class="sidebar">
       <button type="button" class="icon-btn nav-close" data-action="close-nav" aria-label="${esc(t(locale, 'close'))}">×</button>
       <div class="brand">
-        <img class="brand-logo" src="./assets/favicon.svg" alt="" />
+        <img class="brand-logo" src="./assets/logo-mark.png" alt="" />
         <div>
           <h1>${t(locale, 'brand')}</h1>
           <p>${t(locale, 'tagline')}</p>

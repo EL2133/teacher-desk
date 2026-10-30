@@ -1,6 +1,6 @@
 export const dict = {
   zh: {
-    brand: '老師工作台',
+    brand: '教師枱',
     tagline: '給老師的教學工作台',
     version: '版本 1.0',
     copy1: '© 2026 版權所有',
@@ -423,7 +423,7 @@ export const dict = {
       loadDemo: '載入示範資料',
       clear: '清除所有資料',
       about: '關於',
-      aboutBody: '老師工作台是給老師使用的本機教學管理工具。功課日曆可一覽限期；考試頁可匯入成績、比較學期／學年升跌，並產生分數段分析表。',
+      aboutBody: '教師枱是給老師使用的本機教學管理工具。功課日曆可一覽限期；考試頁可匯入成績、比較學期／學年升跌，並產生分數段分析表。',
       lastBackup: '上次備份',
       never: '從未備份',
       theme: '外觀',
@@ -759,7 +759,7 @@ export const dict = {
     },
   },
   en: {
-    brand: 'Teacher Work Platform',
+    brand: 'Teacher Desk',
     tagline: 'A workbench for teachers',
     version: 'Version 1.0',
     copy1: '© 2026 版權所有',
@@ -1181,7 +1181,7 @@ export const dict = {
       loadDemo: 'Load demo data',
       clear: 'Clear all data',
       about: 'About',
-      aboutBody: 'Teacher Work Platform is a local-first workbench for teachers. Import exam results, compare semesters or years, and print the mark-band analysis sheet.',
+      aboutBody: 'Teacher Desk is a local-first workbench for teachers. Import exam results, compare semesters or years, and print the mark-band analysis sheet.',
       lastBackup: 'Last backup',
       never: 'Never',
       theme: 'Appearance',

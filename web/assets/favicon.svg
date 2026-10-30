@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#8b6bb3"/>
-  <text x="32" y="42" text-anchor="middle" font-family="Microsoft JhengHei, Noto Sans TC, sans-serif" font-size="28" font-weight="700" fill="#ffffff">師</text>
+  <rect width="64" height="64" rx="12" fill="#ffffff"/>
+  <!-- Minimal TD mark: navy T + gold D -->
+  <text x="18" y="46" font-family="Georgia, 'Times New Roman', serif" font-size="42" font-weight="700" fill="#0f3250">T</text>
+  <text x="30" y="46" font-family="Georgia, 'Times New Roman', serif" font-size="36" font-weight="700" fill="#c09060">D</text>
 </svg>
